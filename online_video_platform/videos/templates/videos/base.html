@@ -1,0 +1,61 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Online Video Sharing</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+        <link href="https://vjs.zencdn.net/7.8.3/video-js.css" rel="stylesheet" />
+        <!-- Custom fonts for this template-->
+        <link href="{% static 'fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <nav class="navbar navbar-expand navbar-light bg-white static-top osahan-nav static-top">
+            <p class="btn btn-link btn-sm text-secondary order-1 order-sm-0"></p>
+            <a class="navbar-brand mr-1" href="{% url 'home' %}"><h6 class="mt-3 mb-3">Welcome to Online Video Sharing Platform</h6></a>
+            <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-5 my-2 my-md-0 osahan-navbar-search" method="GET" action="{% url 'search_video' %}">
+                <div class="input-group">
+                   <input type="text" class="form-control" placeholder="Search for..." name="query" value="{{ request.GET.query }}">
+                   <div class="input-group-append">
+                      <button class="btn btn-light" type="submit">
+                      <i class="fas fa-search"></i> 
+                      </button>
+                   </div>
+                </div>
+            </form>
+            <!-- Navbar -->
+            <ul class="navbar-nav ml-auto ml-md-0 osahan-right-navbar">
+                {% if user.is_authenticated %}
+                    <li class="nav-item mx-1">
+                        <a class="nav-item nav-link" href="{% url 'upload_video' %}">Upload Video</a>
+                    </li>
+                    <li class="nav-item mx-1">
+                        <a class="nav-item nav-link" href="{% url 'create_playlist' %}">Create Playlist</a>
+                    </li>
+                    <li class="nav-item mx-1">
+                        <a class="nav-item nav-link" href="{% url 'signout' %}">Sign Out</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item mx-1">
+                        <a class="nav-link" href="{% url 'signup' %}">Sign Up</a>
+                    </li>
+                    <li class="nav-item mx-1">
+                        <a class="nav-link" href="{% url 'signin' %}">Sign In</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+        <!-- <div class="container">
+            
+        </div> -->
+        {% block content %}
+        {% endblock content %}
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="{% static 'js/main.js' %}"></script>
+        <script src="https://vjs.zencdn.net/7.8.3/video.js"></script>
+    </body>
+</html>

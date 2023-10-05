@@ -1,0 +1,44 @@
+{% extends "videos/base.html" %}
+{% block content %}
+<div id="wrapper">
+    {% include "videos/sidebar.html" %}
+    <div id="content-wrapper">
+        <div class="container-fluid pb-0">
+            <div class="video-block section-padding">
+                <div class="row">
+                    {% if object_list %}
+                        {% for object in object_list %}
+                        <div class="col-xl-3 col-sm-6 mb-3">
+                            <div class="video-card">
+                                <div class="video-card-image">
+                                        <a href="{% url 'video_detail' object.pk %}"><img class="img-fluid" src="/media/{{ object.thumbnail }}" alt=""></a>
+                                </div>
+                                <div class="video-card-body">
+                                    <div class="video-title">
+                                        <a href="{% url 'video_detail' object.pk %}">{{ object.title }}</a>
+                                    </div>
+                                    <div class="container">
+                                        <div class="row">
+                                            {% for tag in object.tags.all %}
+                                            <div class="video-page text-success">
+                                                {{ tag }}&nbsp;&nbsp;
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="video-view">
+                                        <i class="fa fa-calendar"></i> {{ object.date_posted | date:"M d, Y" }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <h3>No videos uploaded!</h3>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

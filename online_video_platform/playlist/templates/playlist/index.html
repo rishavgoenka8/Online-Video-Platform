@@ -1,0 +1,38 @@
+{% extends "videos/base.html" %}
+{% block content %}
+<div id="wrapper">
+    {% include "videos/sidebar.html" %}
+    <div id="content-wrapper">
+        <div class="container-fluid pb-0">
+            <div class="video-block section-padding">
+                <div class="row">
+                    {% if playlist_list %}
+                        {% for playlist in playlist_list %}
+                        <div class="col-xl-3 col-sm-6 mb-3">
+                            <div class="video-card">
+                                <div class="video-card-image">
+                                        <a href="{% url 'playlist_videos' playlist.pk %}"><img class="img-fluid" src="/media/{{ playlist.thumbnail }}" alt=""></a>
+                                </div>
+                                <div class="video-card-body">
+                                    <div class="video-title">
+                                        <a href="{% url 'playlist_videos' playlist.pk %}">{{ playlist.name }}</a>
+                                    </div>
+                                    <div class="video-view">
+                                        {{ playlist.videos.count }} videos
+                                    </div>
+                                    <div class="video-view">
+                                        <i class="fa fa-calendar"></i> {{ playlist.date_posted | date:"M d, Y" }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <h3>No playlist created!</h3>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

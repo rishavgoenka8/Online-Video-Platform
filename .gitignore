@@ -1,0 +1,11 @@
+video-platform
+online_video_platform/media/uploads/thumbnails/
+online_video_platform/media/uploads/video_files/
+online_video_platform/media/playlists/thumbnails/
+online_video_platform/videos/migrations/0001_initial.py
+online_video_platform/users/migrations/0001_initial.py
+online_video_platform/playlist/migrations/0001_initial.py
+online_video_platform/playlist/migrations/0002_initial.py
+online_video_platform/db.sqlite3
+*.pyc
+.DS_Store

@@ -1,0 +1,127 @@
+{% extends 'videos/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div id="wrapper">
+    {% include "videos/sidebar.html" %}
+	<div id="content-wrapper">
+		<div class="container-fluid pb-0">
+		   	<div class="video-block section-padding">
+			  	<div class="row">
+				 	<div class="col-md-12">
+						<div class="single-video-left mb-3">
+					   		<div class="single-video">
+								<video-js
+									width="720"
+									height="405"
+									controls
+									data-setup='{"playbackRates": [0.5, 1, 1.5, 2], "fluid": true}'>
+									<source src="/media/{{ object.video_file }}" type="video/mp4">
+									<p class="vjs-no-js">
+									To view this video please enable Javascript, and consider upgrading to a web browser that <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+									</p>
+								</video-js>
+					   		</div>
+							<br>
+							<div class="single-video-title box mb-3">
+								<div class="row d-flex justify-content-between px-3">
+									<div>
+										<h2>{{ object.title }}</h2>
+										<p class="mb-0"><i class="fas fa-eye"></i> {{ views_count }} views</p>
+										<p class="mb-0"><i class="fa fa-calendar"></i>&nbsp; {{ object.date_posted | date:"M d, Y" }}</p>
+									</div>
+									<div class="row">
+										{% if user.is_authenticated %}
+											{% if liked_by_user %}
+												<p class="mb-0 pr-3"><span>{{ likes_count }}</span> <a style="color: #ff516b;" href="{% url 'add_like' object.pk %}"><i class="fa fa-heart fa-2x"></i></a></p>
+											{% else %}
+												<p class="mb-0 pr-3"><span>{{ likes_count }}</span> <a href="{% url 'add_like' object.pk %}"><i class="far fa-heart fa-2x"></i></a></p>
+											{% endif %}
+										{% else %}
+											<p class="mb-0 pr-3"><span>{{ likes_count }}</span> <a><i class="far fa-heart fa-2x"></i></a></p>
+										{% endif %}
+										<p class="mb-0 pr-3"><span>{{ comments_count }}</span> <a href="#comment-section"><i class="far fa-comments fa-2x"></i></a></p>
+										{% if user.is_authenticated %}
+											{% if saved_by_user %}
+												<p class="mb-0 pr-3"><a style="color: #ff516b;" href="{% url 'save_video' object.pk %}"><i class="fas fa-bookmark fa-2x"></i></a></p>
+											{% else %}
+												<p class="mb-0 pr-3"><a href="{% url 'save_video' object.pk %}"><i class="fas fa-bookmark fa-2x"></i></a></p>
+											{% endif %}
+											<!-- <p class="mb-0 pr-3"><a><i class="fa fa-folder fa-2x"></i></a></p> -->
+										{% else %}
+											<p class="mb-0 pr-3"><a><i class="fas fa-bookmark fa-2x"></i></a></p>
+										{% endif %}
+										{% if object.uploader == user %}
+											<p class="mb-0 pr-3"><a href="{% url 'delete_video' object.pk %}"><i class="fa fa-trash fa-2x"></i></a></p>
+										{% endif %}
+									</div>
+								</div>
+							</div>
+							<div class="single-video-info-content box mb-3">
+								<h6>About :</h6>
+								<p>{{ object.description }}</p>
+								<h6>Tags :</h6>
+								<p class="tags mb-0">
+									{% for tag in object.tags.all %}
+										<span><a href="#">{{ tag }}</a></span>
+									{% endfor %}
+								</p>
+							</div>
+							<div class="single-video-info-content box mb-3">
+								{% if added_to_playlists %}
+									<h6>Added to playlist :</h6><p> Click to remove from playlist</p>
+									<p class="tags mb-0">
+										{% for playlist in added_to_playlists %}
+												<span><a href="{% url 'delete_from_playlist' playlist.pk object.pk %}">{{ playlist.name }}</a></span>
+										{% endfor %}
+									</p>
+									<br>
+								{% endif %}
+								<h6>Add to playlist :</h6>
+								{% if playlists %}
+									<p class="tags mb-0">
+										{% if playlists|length == added_to_playlists|length %}
+											<p>No more playlists to add videos. Create a new playlist.</p>
+										{% else %}
+											{% for playlist in playlists %}
+												{% if playlist not in added_to_playlists %}
+													<span><a href="{% url 'add_to_playlist' playlist.pk object.pk %}">{{ playlist.name }}</a></span>
+												{% endif %}
+											{% endfor %}
+										{% endif %}
+									</p>
+								{% else %}
+									{% if user.is_authenticated %}
+										<p>No playlists yet. Create a playlist to add videos.</p>
+									{% else %}
+										<p>Login to create a playlist.</p>
+									{% endif %}
+								{% endif %}
+							</div>
+							<div id="comment-section">
+								{% if user.is_authenticated %}
+									<form method="POST">
+										{% csrf_token %}
+										<fieldset class="form-group">
+											<legend class="border-bottom mb-4">Leave a Comment!</legend>
+											{{ comment_form|crispy }}
+										</fieldset>
+										<div class="form-group">
+											<button class="btn btn-outline-info" type="submit">Save</button>
+										</div>
+									</form>
+								{% endif %}
+								{% for comment in comments %}
+									<div class="box mb-1">
+										<h6>{{ comment.user.username }} says:</h6>
+										<p>{{ comment.comment }}</p>
+									</div>
+								{% endfor %}
+							</div>
+						</div>
+				 	</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock content %}

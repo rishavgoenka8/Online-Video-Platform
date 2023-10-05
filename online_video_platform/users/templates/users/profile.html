@@ -1,0 +1,96 @@
+{% extends "videos/base.html" %}
+{% block content %}
+<div id="wrapper">
+    <div id="content-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="row d-flex justify-content-between">
+                        <div class="main-title">
+                            <h4>Profile</h4>
+                        </div>
+                        <p class="tags mb-0">
+                            <span><a href="{% url 'update_profile' user.profile.pk %}">Edit Profile</a></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="control-label">Username</label>
+                        <input class="form-control border-form-control" placeholder="{{ user.username }}" disabled>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                    <label class="control-label">First Name</label>
+                    <input class="form-control border-form-control" placeholder="{{ user.first_name }}" disabled>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="control-label">Last Name</label>
+                        <input class="form-control border-form-control" placeholder="{{ user.last_name }}" disabled>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="control-label">Email Address</label>
+                        <input class="form-control border-form-control" placeholder="{{ user.email }}" disabled>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="control-label">Bio</label>
+                        <textarea class="form-control border-form-control" rows="2" placeholder="{{ user.profile.bio }}" maxlength="100" style="resize: none;" disabled></textarea>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="control-label">Description</label>
+                        <textarea class="form-control border-form-control" rows="4" placeholder="{{ user.profile.description }}" maxlength="300" style="resize: none;" disabled></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                   <div class="main-title">
+                      <h4>Gallery</h4>
+                   </div>
+                </div>
+            </div>
+            <div class="video-block section-padding">
+                <div class="row">
+                    {% for video in videos %}
+                    <div class="col-xl-3 col-sm-6 mb-3">
+                        <div class="video-card">
+                            <div class="video-card-image">
+                                    <a href="{% url 'video_detail' video.pk %}"><img class="img-fluid" src="/media/{{ video.thumbnail }}" alt=""></a>
+                            </div>
+                            <div class="video-card-body">
+                                <div class="video-title">
+                                    <a href="{% url 'video_detail' video.pk %}">{{ video.title }}</a>
+                                </div>
+                                <div class="container">
+                                    <div class="row">
+                                        {% for tag in video.tags.all %}
+                                        <div class="video-page text-success">
+                                            {{ tag }}&nbsp;&nbsp;
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="video-view">
+                                    <i class="fas fa-calendar-alt"></i> {{ video.date_posted | date:"M d, Y" }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
